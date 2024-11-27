@@ -3,7 +3,6 @@ export interface SnippetInput {
   prefix: string;
   description: string;
   scope: string;
-  spacesPerTab: number;
   sourceCode: string;
 }
 

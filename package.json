@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "vue": "^3.4.38",
-    "@vueuse/core": "^10.9.0"
+    "@vueuse/core": "^10.9.0",
+    "monaco-editor": "^0.47.0",
+    "@monaco-editor/loader": "^1.4.0",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.3",

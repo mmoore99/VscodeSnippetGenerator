@@ -1,57 +1,36 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { SnippetInput, VSCodeSnippet } from '../types/snippet';
+import { useToast } from 'vue-toastification';
+import type { SnippetInput } from '../types/snippet';
+import MonacoEditor from './MonacoEditor.vue';
+import { generateSnippet, formatSnippetJson } from '../utils/snippetConverter';
 
+const toast = useToast();
 const props = defineProps<{
   snippet: SnippetInput;
 }>();
 
-const formatSourceCode = (code: string): string[] => {
-  if (!code.trim()) return [];
-  return code
-    .split('\n')
-    .map((line) => line.trimLeft())
-    .filter((line) => line !== '');
-};
-
-const generatedSnippet = computed<VSCodeSnippet>(() => {
-  const { name, prefix, description, scope, sourceCode } = props.snippet;
-
-  if (!name || !sourceCode) {
-    return {};
-  }
-
-  return {
-    [name]: {
-      prefix,
-      body: formatSourceCode(sourceCode),
-      description,
-      scope,
-    },
-  };
+const generatedSnippet = computed(() => {
+  return generateSnippet(props.snippet);
 });
 
 const snippetJson = computed(() => {
-  return JSON.stringify(
-    generatedSnippet.value,
-    null,
-    props.snippet.spacesPerTab
-  );
+  return formatSnippetJson(generatedSnippet.value);
 });
 
 const copyToClipboard = async () => {
   try {
     await navigator.clipboard.writeText(snippetJson.value);
-    alert('Snippet copied to clipboard!');
+    toast.success('Snippet copied to clipboard!');
   } catch (err) {
-    alert('Failed to copy snippet to clipboard');
+    toast.error('Failed to copy snippet to clipboard');
   }
 };
 </script>
 
 <template>
-  <div class="space-y-4">
-    <div class="flex justify-between items-center">
+  <div class="h-full flex flex-col">
+    <div class="flex justify-between items-center mb-4">
       <h2 class="text-lg font-semibold">Preview</h2>
       <button
         @click="copyToClipboard"
@@ -62,6 +41,13 @@ const copyToClipboard = async () => {
       </button>
     </div>
 
-    <pre class="code-preview"><code>{{ snippetJson }}</code></pre>
+    <div class="flex-1 min-h-0">
+      <MonacoEditor
+        v-model="snippetJson"
+        language="json"
+        :readOnly="true"
+        class="h-full"
+      />
+    </div>
   </div>
 </template>
