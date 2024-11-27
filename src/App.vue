@@ -10,8 +10,8 @@ const snippetData = ref<SnippetInput>(defaultSnippetInput());
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold text-gray-900 text-center mb-8">
+    <div class="container px-4 py-8 mx-auto">
+      <h1 class="mb-8 text-3xl font-bold text-center text-gray-900">
         VSCode Snippet Generator
       </h1>
       

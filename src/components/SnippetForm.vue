@@ -59,8 +59,8 @@ const handleSourceCodeChange = (value: string) => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
-    <div class="space-y-4 mb-4">
+  <div class="flex flex-col h-full">
+    <div class="mb-4 space-y-4">
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium text-gray-700">Snippet Name</label>
@@ -120,23 +120,23 @@ const handleSourceCodeChange = (value: string) => {
       </div>
     </div>
 
-    <div class="flex-1 min-h-0 mb-8">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Source Code</label>
+    <div class="flex items-center justify-between mb-2">
+      <label class="block text-sm font-medium text-gray-700">Source Code</label>
+      <button
+        @click="resetForm"
+        class="px-4 py-2 text-sm btn btn-danger"
+      >
+        Reset All
+      </button>
+    </div>
+
+    <div class="flex-1 min-h-0">
       <MonacoEditor
         v-model="form.sourceCode"
         :language="selectedLanguage"
         class="h-full"
         @update:modelValue="handleSourceCodeChange"
       />
-    </div>
-
-    <div class="flex justify-center">
-      <button
-        @click="resetForm"
-        class="btn btn-danger px-4 py-2 text-sm"
-      >
-        Reset All
-      </button>
     </div>
   </div>
 </template>
