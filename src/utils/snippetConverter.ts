@@ -1,11 +1,43 @@
 import type { SnippetInput, VSCodeSnippet } from '../types/snippet';
 
+const escapeSnippetCharacters = (line: string): string => {
+    let inBackticks = false;
+    let escapedLine = "";
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (char === "`") {
+            inBackticks = !inBackticks;
+        }
+
+        if (char === "$") {
+            if (inBackticks && line[i + 1] === "{") {
+                escapedLine += "\\$";
+            } else if (!inBackticks && line[i + 1] === "{") {
+                escapedLine += char;
+            } else if (/\d/.test(line[i + 1])) {
+                escapedLine += char;
+            } else {
+                escapedLine += "\\$";
+            }
+        } else if (char === "\\") {
+            escapedLine += "\\\\";
+        } else {
+            escapedLine += char;
+        }
+    }
+
+    return escapedLine;
+};
+
 const formatSourceCode = (code: string): string[] => {
-  if (!code.trim()) return [];
-  return code
-    .split('\n')
-    .map((line) => line.trimLeft())
-    .filter((line) => line !== '');
+    if (!code.trim()) return [];
+    return code
+        .split("\n")
+        .map((line) => line.trimLeft())
+        .filter((line) => line !== "")
+        .map(escapeSnippetCharacters);
 };
 
 export const generateSnippet = (input: SnippetInput): VSCodeSnippet => {
