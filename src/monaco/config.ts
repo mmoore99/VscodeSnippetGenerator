@@ -23,7 +23,7 @@ export const getEditorConfig = (options: { value: string; language: string; read
     overviewRulerBorder: false,
     quickSuggestions: false,
     suggestOnTriggerCharacters: false,
-    contextmenu: false,
+    contextmenu: true,
     folding: true,
     links: false,
     hover: {
